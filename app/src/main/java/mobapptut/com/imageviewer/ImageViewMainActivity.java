@@ -1,10 +1,16 @@
 package mobapptut.com.imageviewer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 public class ImageViewMainActivity extends AppCompatActivity {
 
@@ -30,7 +36,21 @@ public class ImageViewMainActivity extends AppCompatActivity {
             Uri uri = null;
             if(resultData != null) {
                 uri = resultData.getData();
+                try {
+                    Bitmap bitmap = getBitmapFromUri(uri);
+                    mImageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return bitmap;
     }
 }
