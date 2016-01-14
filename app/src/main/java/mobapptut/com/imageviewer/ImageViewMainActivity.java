@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
 
@@ -36,12 +38,17 @@ public class ImageViewMainActivity extends AppCompatActivity {
             Uri uri = null;
             if(resultData != null) {
                 uri = resultData.getData();
+                /*
                 try {
                     Bitmap bitmap = getBitmapFromUri(uri);
                     mImageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                */
+                Glide.with(this)
+                        .load(uri)
+                        .into(mImageView);
             }
         }
     }
