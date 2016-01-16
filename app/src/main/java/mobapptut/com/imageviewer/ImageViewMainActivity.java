@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -25,6 +27,13 @@ public class ImageViewMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_view_main);
 
         mImageView = (ImageView) findViewById(R.id.imageView);
+        mImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getApplicationContext(), "ImageView long pressed!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
