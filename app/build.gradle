@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "mobapptut.com.imageviewer"
+        applicationId "com.mobapptuts.imageviewer"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1

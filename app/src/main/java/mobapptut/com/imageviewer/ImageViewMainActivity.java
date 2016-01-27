@@ -19,6 +19,8 @@ import java.io.IOException;
 public class ImageViewMainActivity extends AppCompatActivity {
 
     ImageView mImageView;
+    PinchZoomImageView mPinchZoomImageView;
+
     private static final int REQUEST_OPEN_RESULT_CODE = 0;
 
     @Override
@@ -27,6 +29,7 @@ public class ImageViewMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_view_main);
 
         mImageView = (ImageView) findViewById(R.id.imageView);
+        mPinchZoomImageView = (PinchZoomImageView) findViewById(R.id.pinchZoomImageView);
         mImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -55,9 +58,14 @@ public class ImageViewMainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 */
+                /*
                 Glide.with(this)
                         .load(uri)
                         .into(mImageView);
+                        */
+                Glide.with(this)
+                        .load(uri)
+                        .into(mPinchZoomImageView);
             }
         }
     }
