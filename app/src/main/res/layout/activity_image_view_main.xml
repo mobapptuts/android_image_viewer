@@ -15,6 +15,7 @@
     <mobapptut.com.imageviewer.PinchZoomImageView
         android:visibility="invisible"
         android:id="@+id/pinchZoomImageView"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>
