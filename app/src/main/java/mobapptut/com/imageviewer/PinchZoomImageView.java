@@ -25,6 +25,14 @@ public class PinchZoomImageView extends ImageView {
     private final static float mMaxZoom = 3.f;
     private float mScaleFactor = 1.f;
     private ScaleGestureDetector mScaleGestureDetector;
+    private final static int NONE = 0;
+    private final static int PAN = 1;
+    private final static int ZOOM = 2;
+    private int mEventState;
+    private float mStartX = 0;
+    private float mStartY = 0;
+    private float mTranslateX = 0;
+    private float mTranslateY = 0;
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
@@ -32,8 +40,8 @@ public class PinchZoomImageView extends ImageView {
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
             mScaleFactor = Math.max(mMinZoom, Math.min(mMaxZoom, mScaleFactor));
-            invalidate();
-            requestLayout();
+            // invalidate();
+            // requestLayout();
             return super.onScale(detector);
         }
     }
@@ -46,7 +54,29 @@ public class PinchZoomImageView extends ImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        switch(event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                mEventState = PAN;
+                mStartX = event.getX();
+                mStartY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                mEventState = NONE;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mTranslateX = event.getX() - mStartX;
+                mTranslateY = event.getY() - mStartY;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mEventState = ZOOM;
+                break;
+        }
         mScaleGestureDetector.onTouchEvent(event);
+        if((mEventState == PAN && mScaleFactor != mMinZoom) || mEventState == ZOOM) {
+            invalidate();
+            requestLayout();
+        }
         return true;
     }
 
@@ -70,8 +100,9 @@ public class PinchZoomImageView extends ImageView {
         super.onDraw(canvas);
 
         canvas.save();
-        // canvas.scale(mScaleFactor, mScaleFactor);
-        canvas.scale(mScaleFactor, mScaleFactor, mScaleGestureDetector.getFocusX(), mScaleGestureDetector.getFocusY());
+        canvas.scale(mScaleFactor, mScaleFactor);
+        // canvas.scale(mScaleFactor, mScaleFactor, mScaleGestureDetector.getFocusX(), mScaleGestureDetector.getFocusY());
+        canvas.translate(mTranslateX/mScaleFactor, mTranslateY/mScaleFactor);
         canvas.drawBitmap(mBitmap, 0, 0, null);
         canvas.restore();
     }
